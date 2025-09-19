@@ -46,8 +46,9 @@ Pré-requisitos
 # Instalação Local
 
 1. Clone o repositório:
-git clone https://github.com/douglasinforj/sistema_controle_vendas.git
-cd sistema_controle_vendas
+
+- git clone https://github.com/douglasinforj/sistema_controle_vendas.git
+- cd sistema_controle_vendas
 
 2. Instale as dependências:
 
