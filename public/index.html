@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Controle de Vendas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-6">
+        <!-- Header -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Sistema de Controle de Vendas</h1>
+                <p class="text-gray-600">Gerencie clientes, produtos e vendas de forma eficiente</p>
+            </div>
+            <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Sair</button>
+        </div>
+        <!-- Alertas de Vencimento -->
+        <div id="alertas" class="mb-6"></div>
+        <!-- Navegação por Abas -->
+        <div class="bg-white rounded-xl shadow-lg mb-6">
+            <div class="flex flex-wrap border-b">
+                <button onclick="showTab('dashboard')" class="tab-btn px-6 py-4 font-medium text-white tab-active rounded-tl-xl" id="tab-dashboard">Dashboard</button>
+                <button onclick="showTab('clientes')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-blue-600" id="tab-clientes">Clientes</button>
+                <button onclick="showTab('produtos')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-blue-600" id="tab-produtos">Produtos</button>
+                <button onclick="showTab('vendas')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-blue-600" id="tab-vendas">Vendas</button>
+                <button onclick="showTab('financeiro')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-blue-600" id="tab-financeiro">Financeiro</button>
+            </div>
+            <!-- Dashboard -->
+            <div id="dashboard" class="tab-content p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-xl card-hover transition-all">
+                        <h3 class="text-lg font-semibold mb-2">Total de Clientes</h3>
+                        <p class="text-3xl font-bold" id="total-clientes">0</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl card-hover transition-all">
+                        <h3 class="text-lg font-semibold mb-2">Produtos Cadastrados</h3>
+                        <p class="text-3xl font-bold" id="total-produtos">0</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-xl card-hover transition-all">
+                        <h3 class="text-lg font-semibold mb-2">Vendas do Mês</h3>
+                        <p class="text-3xl font-bold" id="vendas-mes">0</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-xl card-hover transition-all">
+                        <h3 class="text-lg font-semibold mb-2">Faturamento</h3>
+                        <p class="text-3xl font-bold" id="faturamento">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white border rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Produtos com Estoque Baixo</h3>
+                        <div id="estoque-baixo" class="space-y-3"></div>
+                    </div>
+                    <div class="bg-white border rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Últimas Vendas</h3>
+                        <div id="ultimas-vendas" class="space-y-3"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Clientes -->
+            <div id="clientes" class="tab-content p-6 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Gerenciar Clientes</h2>
+                    <button onclick="showClienteForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        + Novo Cliente
+                    </button>
+                </div>
+                <div id="cliente-form" class="bg-gray-50 rounded-xl p-6 mb-6 hidden">
+                    <h3 class="text-lg font-semibold mb-4">Cadastrar Cliente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="cliente-nome" placeholder="Nome completo" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="email" id="cliente-email" placeholder="E-mail" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="tel" id="cliente-telefone" placeholder="Telefone" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" id="cliente-cpf" placeholder="CPF" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" id="cliente-endereco" placeholder="Endereço" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent md:col-span-2">
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <button onclick="salvarCliente()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Salvar</button>
+                        <button onclick="cancelarCliente()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg">Cancelar</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Nome</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">E-mail</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Telefone</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">CPF</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-clientes" class="divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Produtos -->
+            <div id="produtos" class="tab-content p-6 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Gerenciar Produtos</h2>
+                    <button onclick="showProdutoForm()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        + Novo Produto
+                    </button>
+                </div>
+                <div id="produto-form" class="bg-gray-50 rounded-xl p-6 mb-6 hidden">
+                    <h3 class="text-lg font-semibold mb-4">Cadastrar Produto</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="produto-nome" placeholder="Nome do produto" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <input type="number" id="produto-preco" placeholder="Preço" step="0.01" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <input type="number" id="produto-estoque" placeholder="Quantidade em estoque" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <textarea id="produto-descricao" placeholder="Descrição do produto" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent md:col-span-3 h-20"></textarea>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <button onclick="salvarProduto()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Salvar</button>
+                        <button onclick="cancelarProduto()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg">Cancelar</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Produto</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Preço</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Estoque</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Status</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-produtos" class="divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Vendas -->
+            <div id="vendas" class="tab-content p-6 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Gerenciar Vendas</h2>
+                    <button onclick="showVendaForm()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        + Nova Venda
+                    </button>
+                </div>
+                <div id="venda-form" class="bg-gray-50 rounded-xl p-6 mb-6 hidden">
+                    <h3 class="text-lg font-semibold mb-4">Registrar Venda</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <select id="venda-cliente" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">Selecione o cliente</option>
+                        </select>
+                        <select id="venda-produto" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">Selecione o produto</option>
+                        </select>
+                        <input type="number" id="venda-quantidade" placeholder="Quantidade" min="1" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <input type="number" id="venda-desconto" placeholder="Desconto (%)" min="0" max="100" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <select id="venda-tipo" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="vista">À Vista</option>
+                            <option value="parcelado">Parcelado</option>
+                        </select>
+                        <select id="venda-pagamento" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="dinheiro">Dinheiro</option>
+                            <option value="cartao">Cartão</option>
+                            <option value="pix">PIX</option>
+                            <option value="boleto">Boleto</option>
+                        </select>
+                        <input type="number" id="venda-parcelas" placeholder="Nº de parcelas" min="1" max="12" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent" disabled>
+                        <input type="date" id="venda-vencimento" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent" title="Data do primeiro vencimento">
+                    </div>
+                    <div class="bg-white rounded-lg p-4 mb-4">
+                        <h4 class="font-semibold mb-2">Resumo da Venda</h4>
+                        <div class="flex justify-between items-center text-lg">
+                            <span>Total:</span>
+                            <span id="venda-total" class="font-bold text-purple-600">R$ 0,00</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="salvarVenda()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg">Finalizar Venda</button>
+                        <button onclick="cancelarVenda()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg">Cancelar</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Data</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Cliente</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Produto</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Qtd</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Total</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Pagamento</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-vendas" class="divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Financeiro -->
+            <div id="financeiro" class="tab-content p-6 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Controle Financeiro</h2>
+                    <div class="flex gap-3">
+                        <input type="text" id="busca-financeiro" placeholder="Buscar por nome ou CPF..." class="border rounded-lg px-4 py-2 w-64 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <button onclick="limparBusca()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Limpar</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+                        <h3 class="text-lg font-semibold text-green-800 mb-2">A Receber</h3>
+                        <p class="text-2xl font-bold text-green-600" id="total-receber">R$ 0,00</p>
+                    </div>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                        <h3 class="text-lg font-semibold text-yellow-800 mb-2">Vencendo Hoje</h3>
+                        <p class="text-2xl font-bold text-yellow-600" id="vencendo-hoje">R$ 0,00</p>
+                    </div>
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-6">
+                        <h3 class="text-lg font-semibold text-red-800 mb-2">Em Atraso</h3>
+                        <p class="text-2xl font-bold text-red-600" id="em-atraso">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border overflow-hidden">
+                    <div class="p-6 border-b">
+                        <h3 class="text-xl font-semibold text-gray-800">Contas a Receber</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Cliente</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Venda</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Parcela</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Vencimento</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Valor</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Status</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-financeiro" class="divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+</html>

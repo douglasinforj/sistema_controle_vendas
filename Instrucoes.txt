@@ -1,0 +1,33 @@
+
+
+project/
+├── public/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── script.js
+│   │   └── login.js
+│   ├── index.html
+│   └── login.html
+├── server.js
+├── package.json
+└── sistema_vendas.db
+
+npm install
+
+
+npm run dev
+
+npm start (produção)
+
+
+---------------------------------------Adicionar usuários-----------------------------------
+
+Default User
+
+Username: admin
+Password: admin123
+
+
+INSERT INTO users (username, password) VALUES ('newuser', '$2b$10$...hashedpassword...');
+
