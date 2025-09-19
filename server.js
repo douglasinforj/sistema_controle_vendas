@@ -4,12 +4,13 @@ const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 require('dotenv').config();
 
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Configurações do servidor
 const JWT_SECRET = process.env.JWT_SECRET;          //Usando variavel de ambiente
@@ -47,6 +48,16 @@ const authenticateJWT = (req, res, next) => {
 
 // Define o caminho do banco de dados
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'sistema_vendas.db');
+
+// Cria o diretório pai do banco de dados se não existir(para o deploy no Render, Cria a pasta data se não exitir la)
+const dbDir = path.dirname(DB_PATH);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true }); // 'recursive: true' cria diretórios aninhados se necessário
+  console.log(`Diretório do banco de dados criado: ${dbDir}`);
+}
+
+
+
 
 // Initialize SQLite database
 const db = new sqlite3.Database(DB_PATH, (err) => {
