@@ -21,6 +21,7 @@ Um aplicativo web full-stack para gerenciar clientes, produtos, vendas e contas 
 
 # Estrutura do Projeto
 
+```
 project/
 ├── public/
 │   ├── css/
@@ -34,6 +35,7 @@ project/
 ├── package.json
 ├── sistema_vendas.db
 └── README.md
+```
 
 Pré-requisitos
 
