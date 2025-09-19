@@ -139,117 +139,241 @@
                 </div>
             </div>
             <!-- Vendas -->
-            <div id="vendas" class="tab-content p-6 hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Gerenciar Vendas</h2>
-                    <button onclick="showVendaForm()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                        + Nova Venda
-                    </button>
-                </div>
-                <div id="venda-form" class="bg-gray-50 rounded-xl p-6 mb-6 hidden">
-                    <h3 class="text-lg font-semibold mb-4">Registrar Venda</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <select id="venda-cliente" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                            <option value="">Selecione o cliente</option>
-                        </select>
-                        <select id="venda-produto" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                            <option value="">Selecione o produto</option>
-                        </select>
-                        <input type="number" id="venda-quantidade" placeholder="Quantidade" min="1" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                        <input type="number" id="venda-desconto" placeholder="Desconto (%)" min="0" max="100" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                        <select id="venda-tipo" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                            <option value="vista">À Vista</option>
-                            <option value="parcelado">Parcelado</option>
-                        </select>
-                        <select id="venda-pagamento" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                            <option value="dinheiro">Dinheiro</option>
-                            <option value="cartao">Cartão</option>
-                            <option value="pix">PIX</option>
-                            <option value="boleto">Boleto</option>
-                        </select>
-                        <input type="number" id="venda-parcelas" placeholder="Nº de parcelas" min="1" max="12" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent" disabled>
-                        <input type="date" id="venda-vencimento" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent" title="Data do primeiro vencimento">
-                    </div>
-                    <div class="bg-white rounded-lg p-4 mb-4">
-                        <h4 class="font-semibold mb-2">Resumo da Venda</h4>
-                        <div class="flex justify-between items-center text-lg">
-                            <span>Total:</span>
-                            <span id="venda-total" class="font-bold text-purple-600">R$ 0,00</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <button onclick="salvarVenda()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg">Finalizar Venda</button>
-                        <button onclick="cancelarVenda()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg">Cancelar</button>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl border overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Data</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Cliente</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Produto</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Qtd</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Total</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Pagamento</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="lista-vendas" class="divide-y divide-gray-200">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- Financeiro -->
-            <div id="financeiro" class="tab-content p-6 hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Controle Financeiro</h2>
-                    <div class="flex gap-3">
-                        <input type="text" id="busca-financeiro" placeholder="Buscar por nome ou CPF..." class="border rounded-lg px-4 py-2 w-64 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <button onclick="limparBusca()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Limpar</button>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    <div class="bg-green-50 border border-green-200 rounded-xl p-6">
-                        <h3 class="text-lg font-semibold text-green-800 mb-2">A Receber</h3>
-                        <p class="text-2xl font-bold text-green-600" id="total-receber">R$ 0,00</p>
-                    </div>
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
-                        <h3 class="text-lg font-semibold text-yellow-800 mb-2">Vencendo Hoje</h3>
-                        <p class="text-2xl font-bold text-yellow-600" id="vencendo-hoje">R$ 0,00</p>
-                    </div>
-                    <div class="bg-red-50 border border-red-200 rounded-xl p-6">
-                        <h3 class="text-lg font-semibold text-red-800 mb-2">Em Atraso</h3>
-                        <p class="text-2xl font-bold text-red-600" id="em-atraso">R$ 0,00</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl border overflow-hidden">
-                    <div class="p-6 border-b">
-                        <h3 class="text-xl font-semibold text-gray-800">Contas a Receber</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Cliente</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Venda</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Parcela</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Vencimento</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Valor</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Status</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="lista-financeiro" class="divide-y divide-gray-200">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            <!-- Clientes -->
+<div id="clientes" class="tab-content p-6 hidden">
+  <div class="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
+    <h2 class="text-2xl font-bold text-gray-800">Gerenciar Clientes</h2>
+    <button onclick="showClienteForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors min-w-[44px] min-h-[44px]">
+      + Novo Cliente
+    </button>
+  </div>
+  <div id="cliente-form" class="bg-gray-50 rounded-xl p-6 mb-6 hidden">
+    <h3 class="text-lg font-semibold mb-4">Cadastrar Cliente</h3>
+    <div class="grid grid-cols-1 gap-4">
+      <input type="text" id="cliente-nome" placeholder="Nome completo" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <input type="email" id="cliente-email" placeholder="E-mail" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <input type="tel" id="cliente-telefone" placeholder="Telefone" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <input type="text" id="cliente-cpf" placeholder="CPF" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <input type="text" id="cliente-endereco" placeholder="Endereço" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    </div>
+    <div class="flex gap-3 mt-4">
+      <button onclick="salvarCliente()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg min-w-[44px] min-h-[44px]">Salvar</button>
+      <button onclick="cancelarCliente()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg min-w-[44px] min-h-[44px]">Cancelar</button>
+    </div>
+  </div>
+  <div class="bg-white rounded-xl border overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Nome</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 sm:table-cell">E-mail</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 md:table-cell">Telefone</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 lg:table-cell">CPF</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="lista-clientes" class="divide-y divide-gray-200">
+          <!-- Exemplo de linha (preenchida dinamicamente via JS) -->
+          <!-- <tr>
+            <td class="px-6 py-4 text-sm" data-label="Nome">Nome Exemplo</td>
+            <td class="px-6 py-4 text-sm sm:table-cell" data-label="E-mail">exemplo@email.com</td>
+            <td class="px-6 py-4 text-sm md:table-cell" data-label="Telefone">(11) 99999-9999</td>
+            <td class="px-6 py-4 text-sm lg:table-cell" data-label="CPF">123.456.789-00</td>
+            <td class="px-6 py-4 text-sm" data-label="Ações">
+              <button class="text-blue-500 hover:underline">Editar</button>
+              <button class="text-red-500 hover:underline">Excluir</button>
+            </td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Produtos -->
+<div id="produtos" class="tab-content p-6 hidden">
+  <div class="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
+    <h2 class="text-2xl font-bold text-gray-800">Gerenciar Produtos</h2>
+    <button onclick="showProdutoForm()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors min-w-[44px] min-h-[44px]">
+      + Novo Produto
+    </button>
+  </div>
+  <div id="produto-form" class="bg-gray-50 rounded-xl p-6 mb-6 hidden">
+    <h3 class="text-lg font-semibold mb-4">Cadastrar Produto</h3>
+    <div class="grid grid-cols-1 gap-4">
+      <input type="text" id="produto-nome" placeholder="Nome do produto" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+      <input type="number" id="produto-preco" placeholder="Preço" step="0.01" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+      <input type="number" id="produto-estoque" placeholder="Quantidade em estoque" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+      <textarea id="produto-descricao" placeholder="Descrição do produto" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent h-20"></textarea>
+    </div>
+    <div class="flex gap-3 mt-4">
+      <button onclick="salvarProduto()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg min-w-[44px] min-h-[44px]">Salvar</button>
+      <button onclick="cancelarProduto()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg min-w-[44px] min-h-[44px]">Cancelar</button>
+    </div>
+  </div>
+  <div class="bg-white rounded-xl border overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Produto</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 sm:table-cell">Preço</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 md:table-cell">Estoque</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 lg:table-cell">Status</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="lista-produtos" class="divide-y divide-gray-200">
+          <!-- Exemplo de linha -->
+          <!-- <tr>
+            <td class="px-6 py-4 text-sm" data-label="Produto">Produto Exemplo</td>
+            <td class="px-6 py-4 text-sm sm:table-cell" data-label="Preço">R$ 99,90</td>
+            <td class="px-6 py-4 text-sm md:table-cell" data-label="Estoque">10</td>
+            <td class="px-6 py-4 text-sm lg:table-cell" data-label="Status">Disponível</td>
+            <td class="px-6 py-4 text-sm" data-label="Ações">
+              <button class="text-red-500 hover:underline">Excluir</button>
+            </td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Vendas -->
+<div id="vendas" class="tab-content p-6 hidden">
+  <div class="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
+    <h2 class="text-2xl font-bold text-gray-800">Gerenciar Vendas</h2>
+    <button onclick="showVendaForm()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors min-w-[44px] min-h-[44px]">
+      + Nova Venda
+    </button>
+  </div>
+  <div id="venda-form" class="bg-gray-50 rounded-xl p-6 mb-6 hidden">
+    <h3 class="text-lg font-semibold mb-4">Registrar Venda</h3>
+    <div class="grid grid-cols-1 gap-4 mb-4">
+      <select id="venda-cliente" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+        <option value="">Selecione o cliente</option>
+      </select>
+      <select id="venda-produto" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+        <option value="">Selecione o produto</option>
+      </select>
+      <input type="number" id="venda-quantidade" placeholder="Quantidade" min="1" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+      <input type="number" id="venda-desconto" placeholder="Desconto (%)" min="0" max="100" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+      <select id="venda-tipo" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+        <option value="vista">À Vista</option>
+        <option value="parcelado">Parcelado</option>
+      </select>
+      <select id="venda-pagamento" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+        <option value="dinheiro">Dinheiro</option>
+        <option value="cartao">Cartão</option>
+        <option value="pix">PIX</option>
+        <option value="boleto">Boleto</option>
+      </select>
+      <input type="number" id="venda-parcelas" placeholder="Nº de parcelas" min="1" max="12" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent" disabled>
+      <input type="date" id="venda-vencimento" class="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent" title="Data do primeiro vencimento">
+    </div>
+    <div class="bg-white rounded-lg p-4 mb-4">
+      <h4 class="font-semibold mb-2">Resumo da Venda</h4>
+      <div class="flex justify-between items-center text-lg">
+        <span>Total:</span>
+        <span id="venda-total" class="font-bold text-purple-600">R$ 0,00</span>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <button onclick="salvarVenda()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg min-w-[44px] min-h-[44px]">Finalizar Venda</button>
+      <button onclick="cancelarVenda()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg min-w-[44px] min-h-[44px]">Cancelar</button>
+    </div>
+  </div>
+  <div class="bg-white rounded-xl border overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Data</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 sm:table-cell">Cliente</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 md:table-cell">Produto</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 lg:table-cell">Qtd</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Total</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 lg:table-cell">Pagamento</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Status</th>
+          </tr>
+        </thead>
+        <tbody id="lista-vendas" class="divide-y divide-gray-200">
+          <!-- Exemplo de linha -->
+          <!-- <tr>
+            <td class="px-6 py-4 text-sm" data-label="Data">2025-09-18</td>
+            <td class="px-6 py-4 text-sm sm:table-cell" data-label="Cliente">Cliente Exemplo</td>
+            <td class="px-6 py-4 text-sm md:table-cell" data-label="Produto">Produto Exemplo</td>
+            <td class="px-6 py-4 text-sm lg:table-cell" data-label="Qtd">5</td>
+            <td class="px-6 py-4 text-sm" data-label="Total">R$ 499,50</td>
+            <td class="px-6 py-4 text-sm lg:table-cell" data-label="Pagamento">PIX</td>
+            <td class="px-6 py-4 text-sm" data-label="Status">Concluída</td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Financeiro -->
+<div id="financeiro" class="tab-content p-6 hidden">
+  <div class="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
+    <h2 class="text-2xl font-bold text-gray-800">Controle Financeiro</h2>
+    <div class="flex gap-3 w-full sm:w-auto">
+      <input type="text" id="busca-financeiro" placeholder="Buscar por nome ou CPF..." class="border rounded-lg px-4 py-2 w-full sm:w-64 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <button onclick="limparBusca()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg min-w-[44px] min-h-[44px]">Limpar</button>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 gap-6 mb-6">
+    <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-green-800 mb-2">A Receber</h3>
+      <p class="text-2xl font-bold text-green-600" id="total-receber">R$ 0,00</p>
+    </div>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-yellow-800 mb-2">Vencendo Hoje</h3>
+      <p class="text-2xl font-bold text-yellow-600" id="vencendo-hoje">R$ 0,00</p>
+    </div>
+    <div class="bg-red-50 border border-red-200 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-red-800 mb-2">Em Atraso</h3>
+      <p class="text-2xl font-bold text-red-600" id="em-atraso">R$ 0,00</p>
+    </div>
+  </div>
+  <div class="bg-white rounded-xl border overflow-hidden">
+    <div class="p-6 border-b">
+      <h3 class="text-xl font-semibold text-gray-800">Contas a Receber</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Cliente</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 sm:table-cell">Venda</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 md:table-cell">Parcela</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 lg:table-cell">Vencimento</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Valor</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 lg:table-cell">Status</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="lista-financeiro" class="divide-y divide-gray-200">
+          <!-- Exemplo de linha -->
+          <!-- <tr>
+            <td class="px-6 py-4 text-sm" data-label="Cliente">Cliente Exemplo</td>
+            <td class="px-6 py-4 text-sm sm:table-cell" data-label="Venda">Venda #123</td>
+            <td class="px-6 py-4 text-sm md:table-cell" data-label="Parcela">1/3</td>
+            <td class="px-6 py-4 text-sm lg:table-cell" data-label="Vencimento">2025-10-01</td>
+            <td class="px-6 py-4 text-sm" data-label="Valor">R$ 166,67</td>
+            <td class="px-6 py-4 text-sm lg:table-cell" data-label="Status">Pendente</td>
+            <td class="px-6 py-4 text-sm" data-label="Ações">
+              <button class="text-green-500 hover:underline">Pagar</button>
+            </td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
         </div>
     </div>
     <script src="/js/script.js"></script>
