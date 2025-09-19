@@ -92,8 +92,8 @@ Deploy
 - Crie um "Web Service", configure:
 - Build Command: npm install
 - Start Command: npm start
-- Disk: Monte sistema_vendas.db em /app/sistema_vendas.db
-- Variáveis de ambiente: Adicione JWT_SECRET
+- Disk: Monte sistema_vendas.db em /data/sistema_vendas.db
+- Variáveis de ambiente: Adicione JWT_SECRET   +  valor da chave
 - Deploy via Git push.
 
 
