@@ -2,6 +2,9 @@
 
 Um aplicativo web full-stack para gerenciar clientes, produtos, vendas e contas a receber. Construído com Node.js, Express, SQLite e frontend em HTML/CSS/JavaScript com Tailwind CSS. Otimizado para responsividade em dispositivos móveis e desktops.
 
+## Site hospedado no Render
+https://sistema-controle-vendas.onrender.com/login.html
+
 ## Funcionalidades
 
 - Autenticação: Login com usuário e senha, protegido por JWT.
